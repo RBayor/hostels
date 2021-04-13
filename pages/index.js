@@ -14,7 +14,7 @@ export default function Home() {
     <div>
       <Head>
         <title>Hostel Hub</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.png" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap"
@@ -36,13 +36,13 @@ export default function Home() {
           </div>
 
           {/* Top image and form */}
-          <div class="grid p-10">
+          <div className="grid p-10">
             <form className="col-start-2 col-span-4 bg-white rounded-lg shadow p-10 h-full ml-auto w-full md:w-1/4 mr-52">
               <div className="text-start font-black">
                 Find A Hostel on Your Campus Now
               </div>
-              <select className="w-full mt-4 text-center">
-                <option disabled selected hidden className="text-center">
+              <select className="w-full mt-4 p-2">
+                <option disabled selected hidden>
                   Select Campus
                 </option>
                 <option>Nyankpala</option>

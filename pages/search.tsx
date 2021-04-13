@@ -1,26 +1,30 @@
 import React from "react";
 import Footer from "../components/footer";
 
-function Search() {
+const Search : React.FC = () => {
   return (
     <div>
       {/* Header */}
-      <div className="flex p-3 w-full h-10 bg-purple-500 md:h-20">
-        <img src="/logo_transparent.png" className="h-12 mr-3 md:h-40" />
+      <div className="flex p-3 w-full h-12 bg-purple-500 md:h-20">
+        <img src="/logo_transparent.png" className="ml-5 h-20 md:h-40" />
+        {/* <div className="text-white m-2 md:hidden">Hosted By Platinum Dev</div> */}
       </div>
 
       {/* Search params Price & Campus */}
-      <div className="flex mt-5 p-3 space-x-5 text-sm md:mt-10">
+      <div className="flex w-full mt-16 p-3 space-x-5 text-sm md:mt-32 md:text-lg items-center">
         {/* campus */}
-        <select className="p-2 bg-white focus:outline-none text-gray-500">
+        <div> 
+          <select className="p-2 bg-white focus:outline-none text-gray-500">
           <option disabled selected hidden>
             Campus
           </option>
           <option>Nyankpala</option>
           <option>Dungu</option>
-        </select>
+        </select></div>
+       
         {/* price */}
-        <span>
+
+        <div>
           <span className="bg-green-400 mt-2 rounded text-white p-1 mb-2">
             GHS
           </span>
@@ -29,13 +33,15 @@ function Search() {
             type="number"
             placeholder="Max Price"
           />
-        </span>
+        </div>
         {/* Compare */}
-        <button className="bg-purple-500 rounded p-2 focus:outline-none active:bg-purple-600">
+        <div>    
+          <button className="bg-purple-500 rounded p-2 focus:outline-none active:bg-purple-600 ml-auto">
           <span className="text-white">Compare</span>{" "}
           {/* Number of hostels added to compare list appear here */}
           <span className="mt-1 ml-0 text-xs rounded text-green-400">(0)</span>
-        </button>
+        </button></div>
+    
       </div>
 
       {/* Hostels Matching Search params */}

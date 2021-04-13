@@ -2,7 +2,12 @@ import Head from "next/head";
 import "tailwindcss/tailwind.css";
 import Footer from "../components/footer";
 import { useRouter } from "next/router";
-export default function Home() {
+// import "../services/firebase";
+import { useEffect } from "react";
+import { getHostels } from "../services/hostels";
+
+
+const Home: React.FC = () => {
   const router = useRouter();
 
   const findHostel = (e) => {
@@ -10,11 +15,15 @@ export default function Home() {
     router.push(`/search`);
   };
 
+  useEffect(() => {
+    getHostels();
+  }, []);
+
   return (
     <div>
       <Head>
         <title>Hostel Hub</title>
-        <link rel="icon" href="/favicon.png" />
+        <link rel="icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap"
@@ -37,11 +46,11 @@ export default function Home() {
 
           {/* Top image and form */}
           <div className="grid p-10">
-            <form className="col-start-2 col-span-4 bg-white rounded-lg shadow p-10 h-full ml-auto w-full md:w-1/4 mr-52">
+            <form className="col-start-2 col-span-4 bg-white rounded-lg shadow p-10 h-full ml-auto w-full md:w-80 lg:w-1/3 mr-52">
               <div className="text-start font-black">
                 Find A Hostel on Your Campus Now
               </div>
-              <select className="w-full mt-4 p-2">
+              <select className="w-full mt-4 p-2 bg-white focus:outline-none text-gray-500">
                 <option disabled selected hidden>
                   Select Campus
                 </option>
@@ -59,7 +68,7 @@ export default function Home() {
           </div>
         </div>
         {/* Ad */}
-        <div className="flex bg-gray-100 rounded-lg shadow m-5 p-3 md:w-1/5 md:p-5">
+        <div className="flex bg-gray-100 rounded-lg shadow m-5 p-3 md:w-96 md:p-5">
           <div
             className="h-full w-16 bg-cover "
             style={{ backgroundImage: "url(/magnus.png)" }}
@@ -78,3 +87,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default Home;

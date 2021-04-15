@@ -43,21 +43,42 @@ const Login = () => {
   }, [auth]);
 
   return (
-    <div className="flex space-x-2 bg-gray-200 h-screen w-screen place-content-center items-center">
-      <button
-        disabled={authorization}
-        onClick={handleLoginWithGoogle}
-        className="text-white text-xlg font-bold bg-green-400 p-3 rounded focus:outline-none"
-      >
-        Login With Google
-      </button>
-      <button
-        disabled={authorization}
-        onClick={handleLogout}
-        className="text-white text-xlg font-bold bg-red-400 p-3 rounded focus:outline-none"
-      >
-        Logout
-      </button>
+    <div className="p-6 max-w-sm  md:max-w-lg mx-auto bg-white rounded-xl shadow-lg flex items-center space-x-4 mt-10">
+      <div>
+        <form>
+          <div className="text-3xl font-medium text-purple-500 w-full mb-5 text-center">
+            Sign in
+          </div>
+          <input
+            className="bg-white rounded p-2 outline-none ring-1 mb-3 w-full "
+            name="ownerName"
+            type="text"
+            placeholder="Email"
+          />
+          <input
+            className="bg-white rounded p-2 outline-none ring-1 mb-3 w-full "
+            name="ownerName"
+            type="text"
+            placeholder="Password"
+          />
+
+          <button
+            disabled={authorization}
+            onClick={handleLogout}
+            className="text-white text-xlg font-bold bg-purple-400 p-3 rounded focus:outline-none w-full mt-5 mb-2"
+          >
+            Sign in
+          </button>
+
+          <button
+            disabled={authorization}
+            onClick={handleLoginWithGoogle}
+            className="text-white text-xlg font-bold bg-green-400 p-3 rounded focus:outline-none  w-full"
+          >
+            Sign in With Google
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

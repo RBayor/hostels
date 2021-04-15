@@ -37,7 +37,7 @@ const Search: React.FC = () => {
             GHS
           </span>
           <input
-            className="p-2 w-24 focus:outline-none "
+            className="p-2 w-24 focus:outline-none"
             type="number"
             placeholder="Max Price"
           />

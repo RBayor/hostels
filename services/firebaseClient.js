@@ -9,6 +9,8 @@ const firebaseConfig = {
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
 };
 
+export default function firebaseClient() {
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+}
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-
 export const firestore = firebase.firestore();

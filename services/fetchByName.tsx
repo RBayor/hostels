@@ -1,6 +1,11 @@
 import { firestore } from "./firebaseClient";
 
-const getHostels = async () => {
+interface Props {
+  hostelName: String;
+  ownerName: String;
+}
+
+const fetchHostelByName = async () => {
   const snapshot = await firestore
     .collection("hostels")
     .orderBy("campus")
@@ -11,4 +16,4 @@ const getHostels = async () => {
   return snapshot.docs;
 };
 
-export { getHostels };
+export { fetchHostelByName };

@@ -1,13 +1,13 @@
 import Head from "next/head";
 import "tailwindcss/tailwind.css";
-import Footer from "../components/footer";
+import Footer from "../src/components/footer";
 import { useRouter } from "next/router";
-// import "../services/firebase";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getHostels } from "../services/hostels";
 
 const Home: React.FC = () => {
   const router = useRouter();
+  const [hostels, setHostels] = useState(null);
 
   const findHostel = (e) => {
     e.preventDefault();
@@ -20,8 +20,22 @@ const Home: React.FC = () => {
   };
 
   useEffect(() => {
-    // getHostels();
+    const getData = async () => {
+      try {
+        const res = await getHostels();
+        setHostels(res);
+      } catch (error) {}
+    };
+    getData();
   }, []);
+
+  // useEffect(() => {
+  //   // console.log(hostels);
+  //   if (hostels)
+  //     hostels.forEach((element) => {
+  //       console.log(element.data());
+  //     });
+  // }, [hostels]);
 
   return (
     <div>
@@ -81,21 +95,53 @@ const Home: React.FC = () => {
         </div>
       </div>
       {/* Ad */}
-      <div className="flex text-white bg-purple-500 rounded-lg shadow m-5 p-3 md:w-96 md:p-5 cursor-pointer transition duration-150 transform hover:scale-105">
-        <div
-          className="h-24 w-16 bg-cover"
-          style={{ backgroundImage: "url(/magnus.png)" }}
-        ></div>
-        <div className="ml-5">
-          Dogoli Zolideme Magnus
-          <br /> Call 0248966248
-          <br /> WhatsApp 0506978622
-          <br /> UDS Dungu Campus
-        </div>
+
+      <div className="flex flex-col md:flex-row md:flex-wrap">
+        {hostels != null ? (
+          hostels.map((hostel) => (
+            <div
+              className="h-96 w-80  mx-auto text-white rounded-lg shadow cursor-pointer transition duration-150 transform hover:scale-105 outline-none m-5"
+              style={{
+                backgroundImage: `url(${hostel.data().hostelImg})`,
+                backgroundRepeat: "no-repeat",
+                objectFit: "cover",
+              }}
+            >
+              <div className="text-purple-500 text-2xl p-3 text-right align-bottom mt-auto h-full font-bold">
+                {hostel.data().hostelName != undefined
+                  ? hostel.data().hostelName.toUpperCase()
+                  : hostel.data().hostelName}
+              </div>
+            </div>
+          ))
+        ) : (
+          <></>
+        )}
       </div>
+
+      <div className="bg-purple-900 text-center p-3 mt-10 text-white">
+        <div>Copyright&copy;2021</div>
+        <div>Platinum Dev Ltd</div>
+      </div>
+
       {/* <Footer /> */}
     </div>
   );
 };
 
 export default Home;
+
+{
+  /* <div className="flex text-white bg-purple-500 rounded-lg shadow m-5 p-3 md:w-96 md:p-5 cursor-pointer transition duration-150 transform hover:scale-105">
+          <div
+            className="h-24 w-16 bg-cover"
+            style={{ backgroundImage: "url(/magnus.png)" }}
+          ></div>
+          <div className="ml-5">
+            Dogoli Zolideme Magnus
+            <br /> Call 0248966248
+            <br /> WhatsApp 0506978622
+            <br /> UDS Dungu Campus
+          </div>
+        </div> */
+}

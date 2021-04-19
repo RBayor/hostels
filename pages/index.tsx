@@ -4,11 +4,12 @@ import Footer from "../src/components/footer";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { getHostels } from "../services/hostels";
+import { fetchHostelByName } from "../services/fetchByName";
 
 const Home: React.FC = () => {
   const router = useRouter();
   const [hostels, setHostels] = useState(null);
-
+  const loadingArr = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
   const findHostel = (e) => {
     e.preventDefault();
     router.push("/search");
@@ -17,6 +18,17 @@ const Home: React.FC = () => {
   const uploadHostel = (e) => {
     e.preventDefault();
     router.push("/login");
+  };
+
+  const fetchHostelDetails = async (
+    hostelName: String,
+    campus: String,
+    hostelImg: String
+  ) => {
+    // const res = await fetchHostelByName(hostelName, campus, hostelImg);
+    // console.log(res);
+    const query = { hostelName, campus, hostelImg };
+    router.push(`/hostel?hostel:${hostelName}?[campus]:${campus}`);
   };
 
   useEffect(() => {
@@ -97,7 +109,7 @@ const Home: React.FC = () => {
       {/* Ad */}
 
       <div className="flex flex-col md:flex-row md:flex-wrap">
-        {hostels != null ? (
+        {hostels !== null ? (
           hostels.map((hostel) => (
             <div
               className="h-96 w-80  mx-auto text-white rounded-lg shadow cursor-pointer transition duration-150 transform hover:scale-105 outline-none m-5"
@@ -106,6 +118,13 @@ const Home: React.FC = () => {
                 backgroundRepeat: "no-repeat",
                 objectFit: "cover",
               }}
+              onClick={() =>
+                fetchHostelDetails(
+                  hostel.data().hostelName,
+                  hostel.data().campus,
+                  hostel.data().hostelImg
+                )
+              }
             >
               <div className="text-purple-500 text-2xl p-3 text-right align-bottom mt-auto h-full font-bold">
                 {hostel.data().hostelName != undefined
@@ -115,7 +134,21 @@ const Home: React.FC = () => {
             </div>
           ))
         ) : (
-          <></>
+          <>
+            {loadingArr.map((e, i) => (
+              <div
+                className="h-96 w-80  mx-auto text-white rounded-lg shadow cursor-pointer transition duration-150 transform hover:scale-105 outline-none m-5 animate-pulse bg-gray-300"
+                style={{
+                  // backgroundColor: "transparent",
+                  backdropFilter: "blur(5px)",
+                  backgroundRepeat: "no-repeat",
+                  objectFit: "cover",
+                }}
+              >
+                <div className="bg-purple-300 rounded-lg h-7 w-36  m-5 ml-auto animate-pulse"></div>
+              </div>
+            ))}
+          </>
         )}
       </div>
 

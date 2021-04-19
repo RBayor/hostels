@@ -5,14 +5,15 @@ interface Props {
   ownerName: String;
 }
 
-const fetchHostelByName = async () => {
+const fetchHostelByName = async (hostelName, campus, hostelImg) => {
+  console.log(`${hostelName}\n${campus}\n${hostelImg}`);
   const snapshot = await firestore
     .collection("hostels")
-    .orderBy("campus")
-    .limit(10)
+    .where("hostelName", "==", hostelName)
+    .where("campus", "==", campus)
+    .where("hostelImg", "==", hostelImg)
     .get();
-  // snapshot.docs.forEach((doc) => console.log(doc.data()));
-  // console.log(snapshot.docs);
+
   return snapshot.docs;
 };
 

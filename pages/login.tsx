@@ -8,7 +8,7 @@ import { useAuth } from "../services/auth";
 const provider = new firebase.auth.GoogleAuthProvider();
 
 const Login = () => {
-  const [authorization, setauthorization] = useState<boolean>(false);
+  const [authorization, setAuthorization] = useState<boolean>(false);
   const [loginInfo, setLoginInfo] = useState<{
     email: string;
     password: string;
@@ -17,19 +17,19 @@ const Login = () => {
   const router = useRouter();
 
   const handleLoginWithGoogle = async () => {
-    setauthorization(true);
+    setAuthorization(true);
 
     try {
-      const res = await firebase.auth().signInWithPopup(provider);
+      await firebase.auth().signInWithPopup(provider);
     } catch (e) {
       console.log(e);
     }
-    setauthorization(false);
+    setAuthorization(false);
   };
 
   const handleSignIn = async (e) => {
     e.preventDefault();
-    setauthorization(true);
+    setAuthorization(true);
 
     try {
       const res = await firebase
@@ -40,7 +40,7 @@ const Login = () => {
     } catch (e) {
       console.log(e);
     }
-    setauthorization(false);
+    setAuthorization(false);
   };
 
   const HandleFieldsChange = (event) => {
@@ -90,8 +90,7 @@ const Login = () => {
               loginInfo.password === ""
             }
             onClick={handleSignIn}
-            className="text-white text-xlg font-bold bg-purple-400 p-3 rounded focus:outline-none w-full mt-5 mb-2"
-            aria-disabled="true"
+            className="text-white text-xlg font-bold bg-purple-400 p-3 rounded focus:outline-none w-full mt-5 mb-2 cursor-pointer transition duration-150 transform hover:scale-105"
           >
             Sign in
           </button>
@@ -103,7 +102,7 @@ const Login = () => {
               loginInfo.password === ""
             }
             onClick={handleLoginWithGoogle}
-            className="text-white text-xlg font-bold bg-green-400 p-3 rounded focus:outline-none  w-full"
+            className="text-white text-xlg font-bold bg-green-400 p-3 rounded focus:outline-none w-full cursor-pointer transition duration-150 transform hover:scale-105"
           >
             Sign in With Google
           </button>

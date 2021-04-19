@@ -103,7 +103,7 @@ const Uploads: React.FC<User> = () => {
             />
             <button
               onClick={handleSubmit}
-              className="text-white text-xlg font-bold bg-purple-500 p-3 rounded focus:outline-none  w-full"
+              className="text-white text-xlg font-bold bg-purple-500 p-3 rounded focus:outline-none w-full cursor-pointer transition duration-150 transform hover:scale-105"
             >
               Upload
             </button>

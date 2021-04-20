@@ -3,8 +3,8 @@ import "tailwindcss/tailwind.css";
 import Footer from "../src/components/footer";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { getHostels } from "../services/hostels";
-import { fetchHostelByName } from "../services/fetchByName";
+import { getHostels } from "../services/fetch/fetchAll";
+import { fetchHostelByName } from "../services/fetch/fetchByName";
 
 const Home: React.FC = () => {
   const router = useRouter();
@@ -27,7 +27,7 @@ const Home: React.FC = () => {
   ) => {
     // const res = await fetchHostelByName(hostelName, campus, hostelImg);
     // console.log(res);
-    const query = { hostelName, campus, hostelImg };
+
     router.push(`/hostel?hostel:${hostelName}?[campus]:${campus}`);
   };
 
@@ -35,7 +35,8 @@ const Home: React.FC = () => {
     const getData = async () => {
       try {
         const res = await getHostels();
-        setHostels(res);
+        console.log(res);
+        if (res.length > 0) setHostels(res);
       } catch (error) {}
     };
     getData();
@@ -110,8 +111,9 @@ const Home: React.FC = () => {
 
       <div className="flex flex-col md:flex-row md:flex-wrap">
         {hostels !== null ? (
-          hostels.map((hostel) => (
+          hostels.map((hostel, index) => (
             <div
+              key={index}
               className="h-96 w-80  mx-auto text-white rounded-lg shadow cursor-pointer transition duration-150 transform hover:scale-105 outline-none m-5"
               style={{
                 backgroundImage: `url(${hostel.data().hostelImg})`,
@@ -137,6 +139,7 @@ const Home: React.FC = () => {
           <>
             {loadingArr.map((e, i) => (
               <div
+                key={i}
                 className="h-96 w-80  mx-auto text-white rounded-lg shadow cursor-pointer transition duration-150 transform hover:scale-105 outline-none m-5 animate-pulse bg-gray-300"
                 style={{
                   // backgroundColor: "transparent",

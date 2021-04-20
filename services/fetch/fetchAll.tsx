@@ -1,9 +1,9 @@
-import { firestore } from "./firebaseClient";
+import { firestore } from "../firebaseClient";
 
 const getHostels = async () => {
   const snapshot = await firestore
     .collection("hostels")
-    .orderBy("campus")
+    .orderBy("hostelName", "desc")
     .limit(10)
     .get();
   // snapshot.docs.forEach((doc) => console.log(doc.data()));

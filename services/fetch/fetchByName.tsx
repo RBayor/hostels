@@ -1,12 +1,11 @@
-import { firestore } from "./firebaseClient";
+import { firestore } from "../firebaseClient";
 
-interface Props {
-  hostelName: String;
-  ownerName: String;
-}
-
-const fetchHostelByName = async (hostelName, campus, hostelImg) => {
-  console.log(`${hostelName}\n${campus}\n${hostelImg}`);
+const fetchHostelByName = async (
+  hostelName: String,
+  campus: String,
+  hostelImg: String
+) => {
+  // console.log(`${hostelName}\n${campus}\n${hostelImg}`);
   const snapshot = await firestore
     .collection("hostels")
     .where("hostelName", "==", hostelName)

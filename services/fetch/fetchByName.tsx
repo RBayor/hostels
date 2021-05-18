@@ -1,4 +1,4 @@
-import { firestore } from "../firebaseClient";
+import { firestore } from "../authentication/firebaseClient";
 
 const fetchHostelByName = async (
   hostelName: String,

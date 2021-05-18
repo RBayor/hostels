@@ -1,5 +1,5 @@
 import admin from "firebase-admin";
-const serviceAccount = require("../secrets.json");
+const serviceAccount = require("../../secrets.json");
 
 export const verifyToken = (token) => {
   if (!admin.apps.length) {

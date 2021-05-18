@@ -1,4 +1,4 @@
-import { firestore } from "../firebaseClient";
+import { firestore } from "../authentication/firebaseClient";
 
 const getHostels = async () => {
   const snapshot = await firestore

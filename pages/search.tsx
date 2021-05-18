@@ -3,10 +3,14 @@ import { useEffect, useState } from "react";
 import { fetchByCampus } from "../services/fetch/fetchByCampus";
 import Footer from "../src/components/footer";
 import Head from "next/head";
+import { useParams } from "../services/search/searchState";
+import { useAuth } from "../services/authentication/auth";
 
-const Search: React.FC = () => {
+const Search: React.FC = (props) => {
   const router = useRouter();
   const [hostels, setHostels] = useState(null);
+  const { params, setParams } = useParams();
+  const auth = useAuth();
   const loadingArr = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
   const fetchHostelDetails = (
@@ -16,19 +20,23 @@ const Search: React.FC = () => {
   ) => {};
 
   useEffect(() => {
-    const getCampusHostels = () => {
-      fetchByCampus("Dungu")
-        .then((hostels) => {
-          if (hostels.length > 0) setHostels(hostels);
-        })
-        .catch((error) => console.log(error));
+    const getHostelsByParams = () => {
+      if (params !== null) {
+        console.log(params.campus);
+        fetchByCampus(params.campus.toString(), parseInt(params.price))
+          .then((hostels) => {
+            if (hostels.length > 0) setHostels(hostels);
+          })
+          .catch((error) => console.log(error));
+      }
     };
 
-    getCampusHostels();
-  }, []);
+    getHostelsByParams();
+  }, [params]);
 
   useEffect(() => {
-    console.log(hostels);
+    // console.log(searchParams);
+    // console.log(auth);
   }, [hostels]);
 
   return (
@@ -103,7 +111,7 @@ const Search: React.FC = () => {
               key={index}
               className="h-96 w-80  mx-auto text-white rounded-lg shadow cursor-pointer transition duration-150 transform hover:scale-105 outline-none m-5"
               style={{
-                backgroundImage: `url(${hostel.data().hostelImg})`,
+                backgroundImage: `url(${hostel.data().hostelImg[0]})`,
                 backgroundRepeat: "no-repeat",
                 objectFit: "cover",
               }}

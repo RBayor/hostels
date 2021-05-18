@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../services/auth";
+import { useAuth } from "../services/authentication/auth";
 import { useRouter } from "next/router";
 import firebase from "firebase/app";
 import "firebase/storage";
-import { firestore } from "../services/firebaseClient";
+import { firestore } from "../services/authentication/firebaseClient";
 import Head from "next/head";
 
 interface User {
@@ -21,6 +21,8 @@ interface Hostel {
   images: null | string;
   description: null | string;
   hostelImg: [];
+  minPrice: number;
+  maxPrice: number;
 }
 
 const Uploads: React.FC = () => {
@@ -40,6 +42,8 @@ const Uploads: React.FC = () => {
     images: null,
     description: null,
     hostelImg: [],
+    minPrice: null,
+    maxPrice: null,
   });
 
   const handleSubmit = async (e: any) => {
@@ -70,6 +74,8 @@ const Uploads: React.FC = () => {
         hostelName: hostelInfo.hostelName,
         campus: hostelInfo.campus,
         description: hostelInfo.description,
+        minPrice: hostelInfo.minPrice,
+        maxPrice: hostelInfo.maxPrice,
       })
       .then((doc) => setHostelDoc(doc.id));
   };
@@ -195,6 +201,22 @@ const Uploads: React.FC = () => {
               name="hostelName"
               type="text"
               placeholder="Hostel Name"
+              required
+              onChange={handleChange}
+            />
+            <input
+              className="bg-white rounded p-2 outline-none mb-3 w-full ring-1"
+              name="minPrice"
+              type="number"
+              placeholder="Minumum Price"
+              required
+              onChange={handleChange}
+            />
+            <input
+              className="bg-white rounded p-2 outline-none mb-3 w-full ring-1"
+              name="maxPrice"
+              type="number"
+              placeholder="Maximum Price"
               required
               onChange={handleChange}
             />

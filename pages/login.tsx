@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import firebase from "firebase/app";
-import "../services/firebaseClient";
+import "../services/authentication/firebaseClient";
 import "firebase/auth";
 import { useRouter } from "next/router";
-import { useAuth } from "../services/auth";
+import { useAuth } from "../services/authentication/auth";
 import Head from "next/head";
 
 const provider = new firebase.auth.GoogleAuthProvider();

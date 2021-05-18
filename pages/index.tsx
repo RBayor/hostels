@@ -17,7 +17,7 @@ const Home: React.FC = () => {
 
   const uploadHostel = (e) => {
     e.preventDefault();
-    router.push("/login");
+    router.push("/uploads");
   };
 
   const fetchHostelDetails = async (
@@ -35,7 +35,6 @@ const Home: React.FC = () => {
     const getData = async () => {
       try {
         const res = await getHostels();
-        console.log(res);
         if (res.length > 0) setHostels(res);
       } catch (error) {}
     };
@@ -55,11 +54,6 @@ const Home: React.FC = () => {
       <Head>
         <title>Hostel Hub</title>
         <link rel="icon" href="/logo_transparent.png" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap"
-          rel="stylesheet"
-        />
       </Head>
 
       {/* Header */}
@@ -71,22 +65,22 @@ const Home: React.FC = () => {
             backgroundImage: "url(/senam.jpg)",
           }}
         >
-          <div className="text-6xl text-center mx-auto p-10 font-bold text-white ">
+          <div className="text-6xl text-center mx-auto p-10 font-bold text-purple-600 ">
             <span className="cursor-pointer">Hostel Hub</span>
           </div>
 
           {/* Top image and form */}
           <div className="grid p-10">
             <form className=" bg-white rounded-lg shadow p-10 h-full ml-auto w-full md:w-96 lg:w-1/3 lg:mr-52">
-              <div className="text-start font-black">
+              <div className="text-start text-gray-900 font-medium">
                 Find A Hostel on Your Campus Now
               </div>
               <select className="w-full mt-4 p-2 bg-white focus:outline-none text-gray-500">
                 <option disabled selected hidden>
                   Select Campus
                 </option>
-                <option>Nyankpala</option>
-                <option>Dungu</option>
+                <option value="nyankpala">Nyankpala</option>
+                <option value="dungu">Dungu</option>
               </select>
 
               <div className="flex flex-col xl:flex-row xl:space-x-4">
@@ -116,7 +110,7 @@ const Home: React.FC = () => {
               key={index}
               className="h-96 w-80  mx-auto text-white rounded-lg shadow cursor-pointer transition duration-150 transform hover:scale-105 outline-none m-5"
               style={{
-                backgroundImage: `url(${hostel.data().hostelImg})`,
+                backgroundImage: `url(${hostel.data().hostelImg[0]})`,
                 backgroundRepeat: "no-repeat",
                 objectFit: "cover",
               }}

@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { fetchByCampus } from "../services/fetch/fetchByCampus";
 import Footer from "../src/components/footer";
+import Head from "next/head";
 
 const Search: React.FC = () => {
   const router = useRouter();
@@ -32,6 +33,10 @@ const Search: React.FC = () => {
 
   return (
     <div className="flex flex-col">
+      <Head>
+        <title>Search</title>
+        <link rel="icon" href="/logo_transparent.png" />
+      </Head>
       {/* Header */}
       <div className="flex p-3 w-full h-12 bg-purple-500 md:h-20">
         <img

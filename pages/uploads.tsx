@@ -1,25 +1,140 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../services/auth";
 import { useRouter } from "next/router";
 import firebase from "firebase/app";
-import "firebase/auth";
+import "firebase/storage";
+import { firestore } from "../services/firebaseClient";
+import Head from "next/head";
 
 interface User {
   name: string;
   token: string;
 }
 
-const Uploads: React.FC<User> = () => {
+interface Hostel {
+  ownerName: null | string;
+  primaryPhone: null | string;
+  secondaryPhone: null | string;
+  email: null | string;
+  hostelName: null | string;
+  campus: null | string;
+  images: null | string;
+  description: null | string;
+  hostelImg: [];
+}
+
+const Uploads: React.FC = () => {
   const router = useRouter();
   const auth = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [imgState, setImgState] = useState(false);
+  const [hostelDoc, setHostelDoc] = useState<null | string>(null);
+  const [uploaded, setUploaded] = useState<number>(0);
+  const [hostelInfo, setHostelInfo] = useState<Hostel>({
+    ownerName: null,
+    primaryPhone: null,
+    secondaryPhone: null,
+    email: null,
+    hostelName: null,
+    campus: null,
+    images: null,
+    description: null,
+    hostelImg: [],
+  });
 
-  const handleSubmit = async () => {
-    const res = await firebase.auth().signOut();
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    setLoading(true);
+
+    await createFirestoreDoc();
+
+    if (hostelInfo.images) {
+      for (let i = 0; i < hostelInfo.images.length; i++) {
+        console.log(hostelInfo.images[i]);
+        await uploadTask(hostelInfo.images[i]);
+      }
+    }
+
+    setLoading(false);
+  };
+
+  const createFirestoreDoc = async () => {
+    await firestore
+      .collection("hostels")
+      .add({
+        id: `${auth.user.uid}-${hostelInfo.hostelName}`,
+        ownerName: hostelInfo.ownerName,
+        primaryPhone: hostelInfo.primaryPhone,
+        secondaryPhone: hostelInfo.secondaryPhone,
+        email: hostelInfo.email,
+        hostelName: hostelInfo.hostelName,
+        campus: hostelInfo.campus,
+        description: hostelInfo.description,
+      })
+      .then((doc) => setHostelDoc(doc.id));
+  };
+
+  const updateImageLocation = async () => {
+    if (hostelInfo.hostelImg && hostelDoc) {
+      await firestore.collection("hostels").doc(hostelDoc).set(
+        {
+          hostelImg: hostelInfo.hostelImg,
+        },
+        { merge: true }
+      );
+    }
+  };
+
+  const handleImages = (event) => {
+    setHostelInfo((prev) => ({
+      ...prev,
+      [event.target.name]: event.target.files,
+    }));
+  };
+
+  useEffect(() => {
+    // hostelInfo.images.forEach((img, index) => uploadTask(img));
+  }, [hostelInfo.images]);
+
+  const uploadTask = async (img: any) => {
+    let storageRef = firebase.storage().ref("hostels" + "/" + img.name);
+    let task = storageRef.put(img);
+    task.on(
+      "state_changed",
+      (snapshot) => {
+        let percentage =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setUploaded(Math.floor(percentage));
+      },
+      (error) => {},
+      async () => {
+        task.snapshot.ref.getDownloadURL().then((downloadURL: string) => {
+          //   console.log(downloadURL);
+
+          setHostelInfo((prev: any) => ({
+            ...prev,
+            hostelImg: [...prev.hostelImg, downloadURL],
+          }));
+        });
+      }
+    );
+  };
+
+  const handleChange = (event) => {
+    setHostelInfo((prev) => ({
+      ...prev,
+      [event.target.name]: event.target.value,
+    }));
   };
 
   useEffect(() => {
     if (!auth.user) router.push("/login");
   }, []);
+
+  useEffect(() => {
+    console.log("test");
+    updateImageLocation();
+  }, [hostelInfo.hostelImg]);
 
   return (
     <div
@@ -28,12 +143,16 @@ const Uploads: React.FC<User> = () => {
         backgroundImage: "url(/senam.jpg)",
       }}
     >
+      <Head>
+        <title>Upload Hostel</title>
+        <link rel="icon" href="/logo_transparent.png" />
+      </Head>
       <div className="p-6 max-w-sm  md:max-w-lg mx-auto bg-white rounded-xl shadow-lg flex items-center space-x-4 ">
         <div>
           <div className="text-3xl font-medium text-purple-500 w-full">
             Upload Hostel
           </div>
-          <form className="pt-5">
+          <form className="pt-5" onSubmit={handleSubmit}>
             {/* Owner Details */}
             <div className="text-xl text-purple-500 mt-3 mb-3">Owner</div>
             <input
@@ -41,30 +160,30 @@ const Uploads: React.FC<User> = () => {
               name="ownerName"
               type="text"
               placeholder="Owner Name"
+              onChange={handleChange}
+              value={hostelInfo.ownerName || ""}
             />
             <input
               className="bg-white rounded p-2 outline-none mb-3 w-full ring-1"
-              name="primaryContact"
+              name="primaryPhone"
               type="text"
               placeholder="Primary Phone Number"
+              onChange={handleChange}
+              required
             />
             <input
               className="bg-white rounded p-2 outline-none mb-3 w-full ring-1"
-              name="primaryContact"
+              name="secondaryPhone"
               type="text"
               placeholder="Secondary Phone Number (optional)"
+              onChange={handleChange}
             />
             <input
               className="bg-white rounded p-2 outline-none mb-3 w-full ring-1"
-              name="primaryContact"
+              name="email"
               type="text"
               placeholder="Email"
-            />
-            <input
-              className="bg-white rounded p-2 outline-none mb-3 w-full ring-1"
-              name="primaryContact"
-              type="text"
-              placeholder="Occupation"
+              onChange={handleChange}
             />
 
             {/* Hostel Details */}
@@ -76,36 +195,56 @@ const Uploads: React.FC<User> = () => {
               name="hostelName"
               type="text"
               placeholder="Hostel Name"
+              required
+              onChange={handleChange}
             />
-            <select className="p-2 bg-white focus:outline-none w-full rounded mb-3 ring-1">
-              <option disabled selected hidden>
+            <select
+              name="campus"
+              className="p-2 bg-white focus:outline-none w-full rounded mb-3 ring-1 text-gray-500"
+              onChange={handleChange}
+              required
+            >
+              <option disabled selected value="" hidden>
                 Campus
               </option>
-              <option>Nyankpala</option>
-              <option>Dungu</option>
+              <option value="nyankpala">Nyankpala</option>
+              <option value="dungu">Dungu</option>
             </select>
-            <input
-              className="bg-white rounded p-2 outline-none mb-3 w-full "
-              name="file"
-              type="file"
-              placeholder="Hostel Name"
-            />
+            <div>
+              <input
+                className="bg-white rounded p-2 outline-none mb-3"
+                name="images"
+                type="file"
+                placeholder="Hostel Name"
+                onChange={handleImages}
+                multiple
+                required
+              />
+              <span className="text-green-500">
+                {uploaded === 0 ? <></> : `${uploaded}%`}
+              </span>
+            </div>
+
             <textarea
               className="bg-white rounded p-2 outline-none mb-3 w-full ring-1"
               name="description"
               placeholder="Description"
-            />
-            <input
-              className="bg-white rounded p-2 outline-none mb-3 w-full ring-1"
-              name="file"
-              type="text"
-              placeholder="Location"
+              required
+              onChange={handleChange}
             />
             <button
-              onClick={handleSubmit}
-              className="text-white text-xlg font-bold bg-purple-500 p-3 rounded focus:outline-none w-full cursor-pointer transition duration-150 transform hover:scale-105"
+              // onClick={handleSubmit}
+              type="submit"
+              disabled={loading}
+              className="text-white text-xlg font-bold bg-purple-500 p-3 rounded focus:outline-none w-full cursor-pointer transition duration-150 transform hover:scale-105 "
             >
               Upload
+            </button>
+            <button
+              onClick={() => router.replace("/")}
+              className="text-white text-xlg font-bold bg-red-500 p-3 rounded focus:outline-none w-full cursor-pointer transition duration-150 transform hover:scale-105 mt-3"
+            >
+              Home
             </button>
           </form>
         </div>

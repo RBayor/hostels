@@ -4,6 +4,7 @@ import "../services/firebaseClient";
 import "firebase/auth";
 import { useRouter } from "next/router";
 import { useAuth } from "../services/auth";
+import Head from "next/head";
 
 const provider = new firebase.auth.GoogleAuthProvider();
 
@@ -32,11 +33,11 @@ const Login = () => {
     setAuthorization(true);
 
     try {
-      const res = await firebase
+      await firebase
         .auth()
         .signInWithEmailAndPassword(loginInfo.email, loginInfo.password);
 
-      console.log(res);
+      // console.log(res);
     } catch (e) {
       console.log(e);
     }
@@ -62,6 +63,10 @@ const Login = () => {
         backgroundImage: "url(/senam.jpg)",
       }}
     >
+      <Head>
+        <title>Login</title>
+        <link rel="icon" href="/logo_transparent.png" />
+      </Head>
       <div className="p-6 max-w-sm  md:max-w-lg mx-auto bg-white rounded-xl shadow-lg flex items-center space-x-4 mt-10">
         <form>
           <div className="text-3xl font-medium text-purple-500 w-full mb-5 text-center">

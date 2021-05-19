@@ -54,11 +54,9 @@ const Uploads: React.FC = () => {
 
     if (hostelInfo.images) {
       for (let i = 0; i < hostelInfo.images.length; i++) {
-        console.log(hostelInfo.images[i]);
         await uploadTask(hostelInfo.images[i]);
       }
     }
-
     setLoading(false);
   };
 
@@ -67,15 +65,15 @@ const Uploads: React.FC = () => {
       .collection("hostels")
       .add({
         id: `${auth.user.uid}-${hostelInfo.hostelName}`,
-        ownerName: hostelInfo.ownerName,
+        ownerName: hostelInfo.ownerName.toLocaleLowerCase(),
         primaryPhone: hostelInfo.primaryPhone,
         secondaryPhone: hostelInfo.secondaryPhone,
-        email: hostelInfo.email,
-        hostelName: hostelInfo.hostelName,
-        campus: hostelInfo.campus,
-        description: hostelInfo.description,
-        minPrice: hostelInfo.minPrice,
-        maxPrice: hostelInfo.maxPrice,
+        email: hostelInfo.email.toLowerCase(),
+        hostelName: hostelInfo.hostelName.toLowerCase(),
+        campus: hostelInfo.campus.toLowerCase(),
+        description: hostelInfo.description.toLowerCase(),
+        minPrice: parseInt(`${hostelInfo.minPrice}`),
+        maxPrice: parseInt(`${hostelInfo.maxPrice}`),
       })
       .then((doc) => setHostelDoc(doc.id));
   };
@@ -138,7 +136,6 @@ const Uploads: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    console.log("test");
     updateImageLocation();
   }, [hostelInfo.hostelImg]);
 

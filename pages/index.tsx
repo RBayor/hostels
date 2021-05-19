@@ -3,7 +3,7 @@ import "tailwindcss/tailwind.css";
 import Footer from "../src/components/footer";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { getHostels } from "../services/fetch/fetchAll";
+import { fetchAllHostels } from "../services/fetch/fetchAll";
 import { fetchHostelByName } from "../services/fetch/fetchByName";
 
 const Home: React.FC = () => {
@@ -34,7 +34,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const res = await getHostels();
+        const res = await fetchAllHostels();
         if (res.length > 0) setHostels(res);
       } catch (error) {}
     };
@@ -112,15 +112,15 @@ const Home: React.FC = () => {
               style={{
                 backgroundImage: `url(${hostel.data().hostelImg[0]})`,
                 backgroundRepeat: "no-repeat",
-                objectFit: "cover",
+                backgroundSize: "cover",
               }}
-              onClick={() =>
-                fetchHostelDetails(
-                  hostel.data().hostelName,
-                  hostel.data().campus,
-                  hostel.data().hostelImg
-                )
-              }
+              // onClick={() =>
+              //   fetchHostelDetails(
+              //     hostel.data().hostelName,
+              //     hostel.data().campus,
+              //     hostel.data().hostelImg
+              //   )
+              // }
             >
               <div className="text-purple-500 text-2xl p-3 text-right align-bottom mt-auto h-full font-bold">
                 {hostel.data().hostelName != undefined

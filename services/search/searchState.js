@@ -14,7 +14,7 @@ export const SearchProvider = ({ children }) => {
   }, []);
 
   return (
-    <SearchContext.Provider value={{ params }}>
+    <SearchContext.Provider value={{ params, setParams }}>
       {children}
     </SearchContext.Provider>
   );

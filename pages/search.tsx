@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { fetchByCampus } from "../services/fetch/fetchByCampus";
+import { fetchByQuery } from "../services/fetch/fetchByQuery";
+import { fetchAllHostels } from "../services/fetch/fetchAll";
 import Footer from "../src/components/footer";
 import Head from "next/head";
 import { useParams } from "../services/search/searchState";
@@ -10,34 +12,75 @@ const Search: React.FC = (props) => {
   const router = useRouter();
   const [hostels, setHostels] = useState(null);
   const { params, setParams } = useParams();
-  const auth = useAuth();
   const loadingArr = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+  const [searchQuery, setSearchQuery] = useState<string | null>();
+  const [allHostels, setAllHostels] = useState(null);
 
   const fetchHostelDetails = (
     hostelName: String,
     campus: String,
     img: String
   ) => {};
-
+  const getHostelsByParams = () => {
+    if (params !== null) {
+      fetchByCampus(params.campus.toString(), parseInt(params.maxPrice))
+        .then((hostels) => {
+          if (hostels.length > 0) setHostels(hostels);
+        })
+        .catch((error) => console.log(error));
+    }
+  };
   useEffect(() => {
-    const getHostelsByParams = () => {
-      if (params !== null) {
-        console.log(params.campus);
-        fetchByCampus(params.campus.toString(), parseInt(params.price))
-          .then((hostels) => {
-            if (hostels.length > 0) setHostels(hostels);
-          })
-          .catch((error) => console.log(error));
-      }
-    };
-
     getHostelsByParams();
   }, [params]);
+
+  useEffect(() => {
+    // const filterWithQuery = () => {
+    //   if (pendingComplaints) {
+    //     pendingComplaints.map((claim) =>
+    //       customDateFilter(startDate, endDate, claim)
+    //     );
+    //   }
+    // };
+    if (searchQuery && searchQuery !== "") {
+      setHostels(
+        allHostels.filter((hostel) =>
+          hostel
+            .data()
+            .hostelName.toLowerCase()
+            .includes(searchQuery.toLowerCase())
+        )
+      );
+    } else {
+      getHostelsByParams();
+    }
+  }, [searchQuery]);
+
+  const updateQuery = (event) => {
+    event.preventDefault();
+
+    setSearchQuery(event.target.value);
+  };
+
+  const handleParamsChange = (event) => {
+    event.preventDefault();
+    setParams((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+  };
 
   useEffect(() => {
     // console.log(searchParams);
     // console.log(auth);
   }, [hostels]);
+
+  useEffect(() => {
+    const fetchAll = async () => {
+      try {
+        const res = await fetchAllHostels();
+        if (res.length > 0) setAllHostels(res);
+      } catch (error) {}
+    };
+    fetchAll();
+  }, []);
 
   return (
     <div className="flex flex-col">
@@ -61,7 +104,9 @@ const Search: React.FC = (props) => {
           <input
             type="text"
             className="w-full p-3 rounded outline-none ring-1 ring-purple-300"
-            placeholder="Search"
+            placeholder="Hostel Name"
+            name="query"
+            onChange={updateQuery}
           />
         </div>
 
@@ -69,12 +114,14 @@ const Search: React.FC = (props) => {
         <div className="flex w-full mt-3 p-3 space-x-5 text-sm  md:text-lg">
           {/* campus */}
 
-          <select className="p-2 bg-white rounded focus:outline-none text-gray-500 md:w-52 ring-1 ring-purple-300">
-            <option disabled selected hidden>
-              Campus
-            </option>
-            <option>Nyankpala</option>
-            <option>Dungu</option>
+          <select
+            className="p-2 bg-white rounded focus:outline-none text-gray-500 md:w-52 ring-1 ring-purple-300"
+            name="campus"
+            onChange={handleParamsChange}
+            value={params ? params.campus : "dungu"}
+          >
+            <option value="nyankpala">Nyankpala</option>
+            <option value="dungu">Dungu</option>
           </select>
 
           {/* price */}
@@ -87,6 +134,8 @@ const Search: React.FC = (props) => {
               className="p-2 w-24 md:w-40 outline-none rounded appearance-none"
               type="number"
               placeholder="Max Price"
+              name="maxPrice"
+              onChange={handleParamsChange}
             />
           </div>
 
@@ -107,26 +156,37 @@ const Search: React.FC = (props) => {
       <div className="flex flex-col md:flex-row md:flex-wrap mt-10">
         {hostels !== null ? (
           hostels.map((hostel, index) => (
-            <div
-              key={index}
-              className="h-96 w-80  mx-auto text-white rounded-lg shadow cursor-pointer transition duration-150 transform hover:scale-105 outline-none m-5"
-              style={{
-                backgroundImage: `url(${hostel.data().hostelImg[0]})`,
-                backgroundRepeat: "no-repeat",
-                objectFit: "cover",
-              }}
-              onClick={() =>
-                fetchHostelDetails(
-                  hostel.data().hostelName,
-                  hostel.data().campus,
-                  hostel.data().hostelImg
-                )
-              }
-            >
-              <div className="text-purple-500 text-2xl p-3 text-right align-bottom mt-auto h-full font-bold">
+            <div className="mx-auto">
+              <div
+                key={index}
+                className="h-96 w-80  text-white rounded-lg shadow cursor-pointer transition duration-150 transform hover:scale-105 outline-none m-5"
+                style={{
+                  backgroundImage: `url(${hostel.data().hostelImg[0]})`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: "cover",
+                }}
+                onClick={() =>
+                  fetchHostelDetails(
+                    hostel.data().hostelName,
+                    hostel.data().campus,
+                    hostel.data().hostelImg
+                  )
+                }
+              >
+                {/* <div className="text-purple-500 text-2xl p-3 text-right align-bottom mt-auto h-full font-bold">
+                  {hostel.data().hostelName != undefined
+                    ? hostel.data().hostelName.toUpperCase()
+                    : hostel.data().hostelName}
+                </div> */}
+              </div>
+              <div className="text-purple-500 text-2xl p-3 text-center align-bottom mt-auto font-bold">
                 {hostel.data().hostelName != undefined
                   ? hostel.data().hostelName.toUpperCase()
                   : hostel.data().hostelName}
+              </div>
+              <div className="text-purple-500 text-xl  text-center align-bottom mt-auto font-bold">
+                GHS {hostel.data().maxPrice} - GHS {hostel.data().minPrice}
+                {console.log(hostel.data().maxPrice)}
               </div>
             </div>
           ))

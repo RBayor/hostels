@@ -1,6 +1,6 @@
 import { firestore } from "../authentication/firebaseClient";
 
-const getHostels = async () => {
+const fetchAllHostels = async () => {
   const snapshot = await firestore
     .collection("hostels")
     .orderBy("hostelName", "desc")
@@ -11,4 +11,4 @@ const getHostels = async () => {
   return snapshot.docs;
 };
 
-export { getHostels };
+export { fetchAllHostels };

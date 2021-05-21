@@ -4,10 +4,10 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { fetchAllHostels } from "../services/fetch/fetchAll";
 
-interface MyParams {
-  id: string;
+interface Props {
+  hostels;
 }
-const Home: React.FC = ({ hostels }) => {
+const Home: React.FC<Props> = ({ hostels }) => {
   const router = useRouter();
   // const [hostels, setHostels] = useState(null);
   const loadingArr = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
@@ -141,6 +141,7 @@ export async function getStaticProps(context) {
 
   return {
     props: { hostels },
+    revalidate: 7200,
   };
 }
 

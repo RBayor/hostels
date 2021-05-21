@@ -1,12 +1,9 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { fetchByCampus } from "../services/fetch/fetchByCampus";
-import { fetchByQuery } from "../services/fetch/fetchByQuery";
 import { fetchAllHostels } from "../services/fetch/fetchAll";
-import Footer from "../src/components/footer";
 import Head from "next/head";
 import { useParams } from "../services/search/searchState";
-import { useAuth } from "../services/authentication/auth";
 
 const Search: React.FC = (props) => {
   const router = useRouter();
@@ -16,11 +13,13 @@ const Search: React.FC = (props) => {
   const [searchQuery, setSearchQuery] = useState<string | null>();
   const [allHostels, setAllHostels] = useState(null);
 
-  const fetchHostelDetails = (
-    hostelName: String,
-    campus: String,
-    img: String
-  ) => {};
+  const fetchHostelDetails = async (id: string) => {
+    router.push({
+      pathname: "/hostel",
+      query: { id },
+    });
+  };
+
   const getHostelsByParams = () => {
     if (params !== null) {
       fetchByCampus(params.campus.toString(), parseInt(params.maxPrice))
@@ -35,13 +34,6 @@ const Search: React.FC = (props) => {
   }, [params]);
 
   useEffect(() => {
-    // const filterWithQuery = () => {
-    //   if (pendingComplaints) {
-    //     pendingComplaints.map((claim) =>
-    //       customDateFilter(startDate, endDate, claim)
-    //     );
-    //   }
-    // };
     if (searchQuery && searchQuery !== "") {
       setHostels(
         allHostels.filter((hostel) =>
@@ -96,7 +88,6 @@ const Search: React.FC = (props) => {
           className="ml-5 h-20 md:h-40 cursor-pointer transition duration-150 transform hover:scale-110"
           onClick={() => router.push("/")}
         />
-        {/* <div className="text-white m-2 md:hidden">Hosted By Platinum Dev</div> */}
       </div>
 
       <div className="max-w-3xl m-auto m">
@@ -136,6 +127,7 @@ const Search: React.FC = (props) => {
               placeholder="Max Price"
               name="maxPrice"
               onChange={handleParamsChange}
+              value={params ? params.maxPrice : 2000}
             />
           </div>
 
@@ -156,7 +148,7 @@ const Search: React.FC = (props) => {
       <div className="flex flex-col md:flex-row md:flex-wrap mt-10">
         {hostels !== null ? (
           hostels.map((hostel, index) => (
-            <div className="mx-auto">
+            <div className="mx-2">
               <div
                 key={index}
                 className="h-96 w-80  text-white rounded-lg shadow cursor-pointer transition duration-150 transform hover:scale-105 outline-none m-5"
@@ -165,27 +157,15 @@ const Search: React.FC = (props) => {
                   backgroundRepeat: "no-repeat",
                   backgroundSize: "cover",
                 }}
-                onClick={() =>
-                  fetchHostelDetails(
-                    hostel.data().hostelName,
-                    hostel.data().campus,
-                    hostel.data().hostelImg
-                  )
-                }
-              >
-                {/* <div className="text-purple-500 text-2xl p-3 text-right align-bottom mt-auto h-full font-bold">
-                  {hostel.data().hostelName != undefined
-                    ? hostel.data().hostelName.toUpperCase()
-                    : hostel.data().hostelName}
-                </div> */}
-              </div>
+                onClick={() => fetchHostelDetails(hostel.data().id)}
+              ></div>
               <div className="text-purple-500 text-2xl p-3 text-center align-bottom mt-auto font-bold">
                 {hostel.data().hostelName != undefined
                   ? hostel.data().hostelName.toUpperCase()
                   : hostel.data().hostelName}
               </div>
-              <div className="text-purple-500 text-xl  text-center align-bottom mt-auto font-bold">
-                GHS {hostel.data().maxPrice} - GHS {hostel.data().minPrice}
+              <div className="text-green-500 text-xl  text-center align-bottom mt-auto font-bold">
+                GHS {hostel.data().minPrice} - GHS {hostel.data().maxPrice}
                 {console.log(hostel.data().maxPrice)}
               </div>
             </div>
@@ -209,8 +189,6 @@ const Search: React.FC = (props) => {
           </>
         )}
       </div>
-
-      {/* <Footer /> */}
     </div>
   );
 };

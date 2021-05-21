@@ -1,10 +1,8 @@
 import Head from "next/head";
 import "tailwindcss/tailwind.css";
-import Footer from "../src/components/footer";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { fetchAllHostels } from "../services/fetch/fetchAll";
-import { fetchHostelByName } from "../services/fetch/fetchByName";
 
 const Home: React.FC = () => {
   const router = useRouter();
@@ -20,15 +18,8 @@ const Home: React.FC = () => {
     router.push("/uploads");
   };
 
-  const fetchHostelDetails = async (
-    hostelName: String,
-    campus: String,
-    hostelImg: String
-  ) => {
-    // const res = await fetchHostelByName(hostelName, campus, hostelImg);
-    // console.log(res);
-
-    router.push(`/hostel?hostel:${hostelName}?[campus]:${campus}`);
+  const fetchHostelDetails = async (id: string) => {
+    router.push({ pathname: "/hostel", query: { id } });
   };
 
   useEffect(() => {
@@ -106,26 +97,25 @@ const Home: React.FC = () => {
       <div className="flex flex-col md:flex-row md:flex-wrap">
         {hostels !== null ? (
           hostels.map((hostel, index) => (
-            <div
-              key={index}
-              className="h-96 w-80  mx-auto text-white rounded-lg shadow cursor-pointer transition duration-150 transform hover:scale-105 outline-none m-5"
-              style={{
-                backgroundImage: `url(${hostel.data().hostelImg[0]})`,
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "cover",
-              }}
-              // onClick={() =>
-              //   fetchHostelDetails(
-              //     hostel.data().hostelName,
-              //     hostel.data().campus,
-              //     hostel.data().hostelImg
-              //   )
-              // }
-            >
-              <div className="text-purple-500 text-2xl p-3 text-right align-bottom mt-auto h-full font-bold">
+            <div className="mx-2">
+              <div
+                key={index}
+                className="h-96 w-80  text-white rounded-lg shadow cursor-pointer transition duration-150 transform hover:scale-105 outline-none mx-auto mt-10 mb-5 md:m-5 md:mt-10"
+                style={{
+                  backgroundImage: `url(${hostel.data().hostelImg[0]})`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: "cover",
+                }}
+                onClick={() => fetchHostelDetails(hostel.data().id)}
+              ></div>
+              <div className="text-purple-500 text-2xl text-center align-bottom font-bold">
                 {hostel.data().hostelName != undefined
                   ? hostel.data().hostelName.toUpperCase()
                   : hostel.data().hostelName}
+              </div>
+              <div className="text-purple-500 text-xl  text-center align-bottom">
+                GHS {hostel.data().minPrice} - GHS {hostel.data().maxPrice}
+                {/* {console.log(hostel.data().maxPrice)} */}
               </div>
             </div>
           ))

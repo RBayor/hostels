@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { fetchByID } from "../services/fetch/fetchById";
+import { fetchByID } from "../services/fetch/fetchByID";
 import Head from "next/head";
 import "tailwindcss/tailwind.css";
 

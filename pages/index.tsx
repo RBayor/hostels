@@ -4,9 +4,12 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { fetchAllHostels } from "../services/fetch/fetchAll";
 
-const Home: React.FC = () => {
+interface MyParams {
+  id: string;
+}
+const Home: React.FC = ({ hostels }) => {
   const router = useRouter();
-  const [hostels, setHostels] = useState(null);
+  // const [hostels, setHostels] = useState(null);
   const loadingArr = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
   const findHostel = (e) => {
     e.preventDefault();
@@ -21,24 +24,6 @@ const Home: React.FC = () => {
   const fetchHostelDetails = async (id: string) => {
     router.push({ pathname: "/hostel", query: { id } });
   };
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const res = await fetchAllHostels();
-        if (res.length > 0) setHostels(res);
-      } catch (error) {}
-    };
-    getData();
-  }, []);
-
-  // useEffect(() => {
-  //   // console.log(hostels);
-  //   if (hostels)
-  //     hostels.forEach((element) => {
-  //       console.log(element.data());
-  //     });
-  // }, [hostels]);
 
   return (
     <div>
@@ -102,20 +87,19 @@ const Home: React.FC = () => {
                 key={index}
                 className="h-96 w-80  text-white rounded-lg shadow cursor-pointer transition duration-150 transform hover:scale-105 outline-none mx-auto mt-10 mb-5 md:m-5 md:mt-10"
                 style={{
-                  backgroundImage: `url(${hostel.data().hostelImg[0]})`,
+                  backgroundImage: `url(${hostel.hostelImg[0]})`,
                   backgroundRepeat: "no-repeat",
                   backgroundSize: "cover",
                 }}
-                onClick={() => fetchHostelDetails(hostel.data().id)}
+                onClick={() => fetchHostelDetails(hostel.id)}
               ></div>
               <div className="text-purple-500 text-2xl text-center align-bottom font-bold">
-                {hostel.data().hostelName != undefined
-                  ? hostel.data().hostelName.toUpperCase()
-                  : hostel.data().hostelName}
+                {hostel.hostelName != undefined
+                  ? hostel.hostelName.toUpperCase()
+                  : hostel.hostelName}
               </div>
               <div className="text-purple-500 text-xl  text-center align-bottom">
-                GHS {hostel.data().minPrice} - GHS {hostel.data().maxPrice}
-                {/* {console.log(hostel.data().maxPrice)} */}
+                GHS {hostel.minPrice} - GHS {hostel.maxPrice}
               </div>
             </div>
           ))
@@ -149,19 +133,15 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export async function getStaticProps(context) {
+  let hostels = [];
+  const res = await fetchAllHostels();
 
-{
-  /* <div className="flex text-white bg-purple-500 rounded-lg shadow m-5 p-3 md:w-96 md:p-5 cursor-pointer transition duration-150 transform hover:scale-105">
-          <div
-            className="h-24 w-16 bg-cover"
-            style={{ backgroundImage: "url(/magnus.png)" }}
-          ></div>
-          <div className="ml-5">
-            Dogoli Zolideme Magnus
-            <br /> Call 0248966248
-            <br /> WhatsApp 0506978622
-            <br /> UDS Dungu Campus
-          </div>
-        </div> */
+  res.forEach((hostel) => hostels.push(hostel.data()));
+
+  return {
+    props: { hostels },
+  };
 }
+
+export default Home;

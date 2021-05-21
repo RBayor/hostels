@@ -4,10 +4,25 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { fetchAllHostels } from "../services/fetch/fetchAll";
 
-interface Props {
-  hostels;
-}
-const Home: React.FC<Props> = ({ hostels }) => {
+// interface Props {
+//   [index: number]: Hostel;
+// }
+
+// interface Hostel {
+//   ownerName: null | string;
+//   primaryPhone: null | string;
+//   secondaryPhone: null | string;
+//   email: null | string;
+//   hostelName: null | string;
+//   campus: null | string;
+//   images: null | string;
+//   description: null | string;
+//   hostelImg: [];
+//   minPrice: number;
+//   maxPrice: number;
+// }
+
+const Home = ({ hostels }) => {
   const router = useRouter();
   // const [hostels, setHostels] = useState(null);
   const loadingArr = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];

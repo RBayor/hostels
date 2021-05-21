@@ -36,7 +36,7 @@ const Home = ({ hostels }) => {
     router.push("/uploads");
   };
 
-  const fetchHostelDetails = async (id: string) => {
+  const fetchHostelDetails = async (id) => {
     router.push({ pathname: "/hostel", query: { id } });
   };
 

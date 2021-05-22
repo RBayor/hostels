@@ -33,11 +33,14 @@ const Hostel = (props) => {
       </Head>
 
       {/* Display hostel images in cards that when clicked open a modal to full image */}
-      <div className="flex flex-col md:flex-row md:flex-wrap mt-10">
+      <div className="mx-auto text-4xl p-5 font-bold text-purple-500">
+        {hostel.hostelName.toUpperCase()}
+      </div>
+      <div className="flex flex-col md:flex-row md:flex-wrap mt-5 mx-auto">
         {hostel.hostelImg.map((img, index) => (
           <div
             key={index}
-            className="h-96 w-80  text-white rounded-lg shadow cursor-pointer transition duration-150 transform hover:scale-105 outline-none mx-auto"
+            className="h-96 w-80  text-white rounded-lg shadow cursor-pointer transition duration-150 transform hover:scale-105 outline-none mx-5"
             style={{
               backgroundImage: `url(${img})`,
               backgroundRepeat: "no-repeat",

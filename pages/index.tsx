@@ -22,9 +22,9 @@ import { fetchAllHostels } from "../services/fetch/fetchAll";
 //   maxPrice: number;
 // }
 
-const Home = ({ hostels }) => {
+const Home = () => {
   const router = useRouter();
-  // const [hostels, setHostels] = useState(null);
+  const [hostels, setHostels] = useState(null);
   const loadingArr = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
   const findHostel = (e) => {
     e.preventDefault();
@@ -35,6 +35,16 @@ const Home = ({ hostels }) => {
     e.preventDefault();
     router.push("/uploads");
   };
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const res = await fetchAllHostels();
+        if (res.length > 0) setHostels(res);
+      } catch (error) {}
+    };
+    getData();
+  }, []);
 
   const fetchHostelDetails = async (id) => {
     router.push({ pathname: "/hostel", query: { id } });
@@ -97,24 +107,24 @@ const Home = ({ hostels }) => {
       <div className="flex flex-col md:flex-row md:flex-wrap">
         {hostels !== null ? (
           hostels.map((hostel, index) => (
-            <div className="mx-2">
+            <div className="mx-2" key={index}>
               <div
-                key={index}
                 className="h-96 w-80  text-white rounded-lg shadow cursor-pointer transition duration-150 transform hover:scale-105 outline-none mx-auto mt-10 mb-5 md:m-5 md:mt-10"
                 style={{
-                  backgroundImage: `url(${hostel.hostelImg[0]})`,
+                  backgroundImage: `url(${hostel.data().hostelImg[0]})`,
                   backgroundRepeat: "no-repeat",
                   backgroundSize: "cover",
                 }}
-                onClick={() => fetchHostelDetails(hostel.id)}
+                onClick={() => fetchHostelDetails(hostel.data().id)}
               ></div>
               <div className="text-purple-500 text-2xl text-center align-bottom font-bold">
-                {hostel.hostelName != undefined
-                  ? hostel.hostelName.toUpperCase()
-                  : hostel.hostelName}
+                {hostel.data().hostelName != undefined
+                  ? hostel.data().hostelName.toUpperCase()
+                  : hostel.data().hostelName}
               </div>
-              <div className="text-purple-500 text-xl  text-center align-bottom">
-                GHS {hostel.minPrice} - GHS {hostel.maxPrice}
+              <div className="text-green-500 text-xl  text-center align-bottom font-semibold">
+                GHS {hostel.data().minPrice} - GHS {hostel.data().maxPrice}
+                {/* {console.log(hostel.data().maxPrice)} */}
               </div>
             </div>
           ))
@@ -148,16 +158,16 @@ const Home = ({ hostels }) => {
   );
 };
 
-export async function getStaticProps(context) {
-  let hostels = [];
-  const res = await fetchAllHostels();
+// export async function getStaticProps(context) {
+//   let hostels = [];
+//   const res = await fetchAllHostels();
 
-  res.forEach((hostel) => hostels.push(hostel.data()));
+//   res.forEach((hostel) => hostels.push(hostel.data()));
 
-  return {
-    props: { hostels },
-    revalidate: 7200,
-  };
-}
+//   return {
+//     props: { hostels },
+//     revalidate: 7200,
+//   };
+// }
 
 export default Home;

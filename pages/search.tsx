@@ -164,7 +164,7 @@ const Search: React.FC = (props) => {
                   ? hostel.data().hostelName.toUpperCase()
                   : hostel.data().hostelName}
               </div>
-              <div className="text-green-500 text-xl  text-center align-bottom mt-auto font-bold">
+              <div className="text-green-500 text-xl  text-center align-bottom font-semibold">
                 GHS {hostel.data().minPrice} - GHS {hostel.data().maxPrice}
                 {console.log(hostel.data().maxPrice)}
               </div>

@@ -4,7 +4,7 @@ const fetchAllHostels = async () => {
   const snapshot = await firestore
     .collection("hostels")
     .orderBy("hostelName", "desc")
-    .limit(10)
+    .limit(20)
     .get();
   // snapshot.docs.forEach((doc) => console.log(doc.data()));
   // console.log(snapshot.docs);

@@ -29,6 +29,7 @@ const Search: React.FC = (props) => {
         .catch((error) => console.log(error));
     }
   };
+
   useEffect(() => {
     getHostelsByParams();
   }, [params]);
@@ -59,10 +60,10 @@ const Search: React.FC = (props) => {
     setParams((prev) => ({ ...prev, [event.target.name]: event.target.value }));
   };
 
-  useEffect(() => {
-    // console.log(searchParams);
-    // console.log(auth);
-  }, [hostels]);
+  // useEffect(() => {
+  //   // console.log(searchParams);
+  //   // console.log(auth);
+  // }, [hostels]);
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -127,7 +128,7 @@ const Search: React.FC = (props) => {
               placeholder="Max Price"
               name="maxPrice"
               onChange={handleParamsChange}
-              value={params ? params.maxPrice : 2000}
+              value={params ? params.maxPrice : 10000}
             />
           </div>
 
@@ -166,7 +167,6 @@ const Search: React.FC = (props) => {
               </div>
               <div className="text-green-500 text-xl  text-center align-bottom font-semibold">
                 GHS {hostel.data().minPrice} - GHS {hostel.data().maxPrice}
-                {console.log(hostel.data().maxPrice)}
               </div>
             </div>
           ))
@@ -182,9 +182,7 @@ const Search: React.FC = (props) => {
                   backgroundRepeat: "no-repeat",
                   objectFit: "cover",
                 }}
-              >
-                <div className="bg-purple-300 rounded-lg h-7 w-36  m-5 ml-auto animate-pulse"></div>
-              </div>
+              ></div>
             ))}
           </>
         )}

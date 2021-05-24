@@ -5,6 +5,7 @@ import firebase from "firebase/app";
 import "firebase/storage";
 import { firestore } from "../services/authentication/firebaseClient";
 import Head from "next/head";
+import { v4 as uuidv4 } from "uuid";
 
 interface User {
   name: string;
@@ -64,8 +65,9 @@ const Uploads: React.FC = () => {
     await firestore
       .collection("hostels")
       .add({
-        id: `${auth.user.uid}-${hostelInfo.hostelName}`,
-        ownerName: hostelInfo.ownerName.toLocaleLowerCase(),
+        userID: `${auth.user.uid}`,
+        id: uuidv4,
+        ownerName: hostelInfo.ownerName.toLowerCase(),
         primaryPhone: hostelInfo.primaryPhone,
         secondaryPhone: hostelInfo.secondaryPhone,
         email: hostelInfo.email.toLowerCase(),

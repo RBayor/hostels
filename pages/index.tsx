@@ -3,6 +3,7 @@ import "tailwindcss/tailwind.css";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { fetchAllHostels } from "../services/fetch/fetchAll";
+import { useParams } from "../services/search/searchState";
 
 // interface Props {
 //   [index: number]: Hostel;
@@ -26,6 +27,7 @@ const Home = () => {
   const router = useRouter();
   const [hostels, setHostels] = useState(null);
   const loadingArr = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+  const { params, setParams } = useParams();
   const findHostel = (e) => {
     e.preventDefault();
     router.push("/search");
@@ -50,6 +52,19 @@ const Home = () => {
     router.push({ pathname: "/hostel", query: { id } });
   };
 
+  const handleParamsChange = (event) => {
+    // console.log(event.target.value);
+    event.preventDefault();
+    setParams((prev) => ({
+      ...prev,
+      [event.target.name]: event.target.value,
+    }));
+  };
+
+  useEffect(() => {
+    console.log(params);
+  });
+
   return (
     <div>
       <Head>
@@ -72,14 +87,16 @@ const Home = () => {
 
           {/* Top image and form */}
           <div className="grid p-10">
-            <form className=" bg-white rounded-lg shadow p-10 h-full ml-auto w-full md:w-96 lg:w-1/3 lg:mr-52">
+            <form className=" bg-white rounded-lg shadow p-10 h-full ml-auto w-full md:w-72 lg:w-96 lg:mr-52">
               <div className="text-start text-gray-900 font-medium">
                 Find A Hostel on Your Campus Now
               </div>
-              <select className="w-full mt-4 p-2 bg-white focus:outline-none text-gray-500">
-                <option disabled selected hidden>
-                  Select Campus
-                </option>
+              <select
+                className="w-full mt-4 p-2 bg-white focus:outline-none text-gray-500 ring-1 rounded ring-purple-500"
+                name="campus"
+                value={params ? params.campus : "dungu"}
+                onChange={handleParamsChange}
+              >
                 <option value="nyankpala">Nyankpala</option>
                 <option value="dungu">Dungu</option>
               </select>
@@ -91,12 +108,12 @@ const Home = () => {
                 >
                   Find
                 </button>
-                <button
+                {/* <button
                   onClick={uploadHostel}
                   className="rounded bg-purple-500 text-white w-full h-10 mt-5 focus:outline-none  cursor-pointer transition duration-150 transform hover:scale-105"
                 >
                   Upload Hostel
-                </button>
+                </button> */}
               </div>
             </form>
           </div>
@@ -140,9 +157,7 @@ const Home = () => {
                   backgroundRepeat: "no-repeat",
                   objectFit: "cover",
                 }}
-              >
-                <div className="bg-purple-300 rounded-lg h-7 w-36  m-5 ml-auto animate-pulse"></div>
-              </div>
+              ></div>
             ))}
           </>
         )}

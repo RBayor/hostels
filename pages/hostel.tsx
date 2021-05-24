@@ -36,7 +36,7 @@ const Hostel = (props) => {
 
   useEffect(() => {
     const getHostelsByParams = () => {
-      if (params !== null) {
+      if (params !== null && hostel !== null) {
         fetchByCampus(params.campus.toString(), parseInt(params.maxPrice))
           .then((host) => {
             if (host.length > 0) {

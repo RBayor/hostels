@@ -149,7 +149,7 @@ const Search: React.FC = (props) => {
       <div className="flex flex-col md:flex-row md:flex-wrap mt-10">
         {hostels !== null ? (
           hostels.map((hostel, index) => (
-            <div className="mx-2">
+            <div className="mx-auto md:mx-2">
               <div
                 key={index}
                 className="h-96 w-80  text-white rounded-lg shadow cursor-pointer transition duration-150 transform hover:scale-105 outline-none m-5"

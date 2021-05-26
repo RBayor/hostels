@@ -121,12 +121,12 @@ const Home = () => {
       </div>
       {/* Ad */}
 
-      <div className="flex flex-col md:flex-row md:flex-wrap">
+      <div className="flex flex-col md:flex-row md:flex-wrap max-w-full mx-auto mt-10 ">
         {hostels !== null ? (
           hostels.map((hostel, index) => (
-            <div className="mx-2" key={index}>
+            <div className="mx-auto md:mx-0 2xl:ml-3" key={index}>
               <div
-                className="h-96 w-80  text-white rounded-lg shadow cursor-pointer transition duration-150 transform hover:scale-105 outline-none mx-auto mt-10 mb-5 md:m-5 md:mt-10"
+                className="h-96 w-80 md:h-80 md:w-72 2xl:h-96 2xl:w-80  text-white rounded-lg shadow cursor-pointer transition duration-150 transform hover:scale-105 outline-none m-5"
                 style={{
                   backgroundImage: `url(${hostel.data().hostelImg[0]})`,
                   backgroundRepeat: "no-repeat",

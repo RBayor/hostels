@@ -91,7 +91,7 @@ const Search: React.FC = (props) => {
         />
       </div>
 
-      <div className="max-w-3xl m-auto m">
+      <div className="max-w-3xl m-auto ">
         <div className="mt-16 m-3">
           <input
             type="text"
@@ -134,25 +134,23 @@ const Search: React.FC = (props) => {
 
           {/* Compare */}
           {/* <div> */}
-          <button className="bg-purple-500 rounded p-2 focus:outline-none active:bg-purple-600 ml-auto transition duration-150 transform hover:scale-105">
-            <span className="text-white">Compare</span>
-            {/* Number of hostels added to compare list appear here */}
-            <span className="mt-1 ml-0 text-xs rounded text-green-400">
-              (0)
-            </span>
+          <button className="bg-purple-500 rounded p-2 w-16 focus:outline-none active:bg-purple-600  transition duration-150 transform hover:scale-105">
+            <div className="flex flex-row ">
+              <img src="/assets/unfav.svg" />
+              <span className="ml-1 text-xs rounded text-green-400">(0)</span>
+            </div>
           </button>
         </div>
       </div>
 
       {/* Hostels Matching Search params */}
 
-      <div className="flex flex-col md:flex-row md:flex-wrap mt-10">
+      <div className="flex flex-col md:flex-row md:flex-wrap mt-10 max-w-full m-auto">
         {hostels !== null ? (
           hostels.map((hostel, index) => (
-            <div className="mx-auto md:mx-2">
+            <div className="mx-auto md:mx-0 2xl:ml-3" key={index}>
               <div
-                key={index}
-                className="h-96 w-80  text-white rounded-lg shadow cursor-pointer transition duration-150 transform hover:scale-105 outline-none m-5"
+                className="h-96 w-80 md:h-80 md:w-72 2xl:h-96 2xl:w-80  text-white rounded-lg shadow cursor-pointer transition duration-150 transform hover:scale-105 outline-none m-5"
                 style={{
                   backgroundImage: `url(${hostel.data().hostelImg[0]})`,
                   backgroundRepeat: "no-repeat",
@@ -175,7 +173,7 @@ const Search: React.FC = (props) => {
             {loadingArr.map((e, i) => (
               <div
                 key={i}
-                className="h-96 w-80  mx-auto text-white rounded-lg shadow cursor-pointer transition duration-150 transform hover:scale-105 outline-none m-5 animate-pulse bg-gray-300"
+                className="h-96 w-80 md:h-80 md:w-72 2xl:h-96 2xl:w-80 mx-auto text-white rounded-lg shadow cursor-pointer transition duration-150 transform hover:scale-105 outline-none m-5 animate-pulse bg-gray-300"
                 style={{
                   // backgroundColor: "transparent",
                   backdropFilter: "blur(5px)",

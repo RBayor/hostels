@@ -5,32 +5,44 @@ import Head from "next/head";
 import "tailwindcss/tailwind.css";
 import { useParams } from "../services/search/searchState";
 import { fetchByCampus } from "../services/fetch/fetchByCampus";
+import { useFavs } from "../services/favourite/favourite";
 
-const Hostel = (props) => {
+const Hostel = () => {
   const router = useRouter();
   const query = router.query;
   const { params, setParams } = useParams();
+  const { favs, setFavs, addToFavs } = useFavs();
   const [hostel, setHostel] = useState(null);
   const [hostels, setHostels] = useState([]);
   const loadingArr = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
   const fetchHostelDetails = async (id: string) => {
-    router.push({
-      pathname: "/hostel",
-      query: { id },
-    });
+    clearData();
+    router
+      .push({
+        pathname: "/hostel",
+        query: { id },
+      })
+      .then(() => location.reload());
+
+    // fetchHostel();
+  };
+
+  const clearData = () => {
+    setHostel(null);
+    setHostels([]);
+  };
+
+  const fetchHostel = async () => {
+    if (query) {
+      const res = await fetchByID(query.id.toString());
+      res.forEach((hostel) => {
+        setHostel(hostel.data());
+      });
+    }
   };
 
   useEffect(() => {
-    const fetchHostel = async () => {
-      if (query) {
-        const res = await fetchByID(query.id.toString());
-        res.forEach((hostel) => {
-          setHostel(hostel.data());
-        });
-      }
-    };
-
     fetchHostel();
   }, []);
 
@@ -53,6 +65,12 @@ const Hostel = (props) => {
     };
     getHostelsByParams();
   }, [hostel]);
+
+  // const updateFav = (hostel) => {
+  // if (!favs.includes(hostel)) setFavs((prev) => [...prev, hostel]);
+  // addToFavs(hostel);
+  // console.log(hostel);
+  // };
 
   // useEffect(() => {
   //   console.log(hostels);
@@ -85,15 +103,23 @@ const Hostel = (props) => {
           <span className="font-bold text-xl text-purple-500 mb-5">
             Description
           </span>
-          <div className="text-purple-400 flex flex-row pb-2 pt-2">
+          <div className="text-purple-400 flex flex-row pb-2 pt-2 text-lg">
+            <img
+              src="/assets/unfav.svg"
+              className="mr-3 text-sm cursor-pointer"
+              onClick={() => addToFavs(hostel)}
+            />
+            {hostel.hostelName.toUpperCase()}
+          </div>
+          <div className="text-purple-400 flex flex-row pb-2 pt-2 text-sm">
             <img src="/assets/location.svg" className="mr-3 text-sm" />
             {hostel.campus.toUpperCase()}
           </div>
-          <div className="text-green-400 flex flex-row pb-2 pt-2">
+          <div className="text-green-400 flex flex-row pb-2 pt-2 text-sm">
             <img src="/assets/cost.svg" className="mr-3 text-sm" />
             GHS {hostel.minPrice} - GHS {hostel.maxPrice}
           </div>
-          <div>{hostel.description}</div>
+          <div className="p-3">{hostel.description}</div>
         </div>
 
         <div className="min-h-max min-w-max p-10 flex flex-col flex-grow rounded-lg shadow outline-none m-10  space-y-5">

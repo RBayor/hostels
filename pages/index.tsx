@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { fetchAllHostels } from "../services/fetch/fetchAll";
 import { useParams } from "../services/search/searchState";
+import { useFavs } from "../services/favourite/favourite";
 
 // interface Props {
 //   [index: number]: Hostel;
@@ -28,15 +29,16 @@ const Home = () => {
   const [hostels, setHostels] = useState(null);
   const loadingArr = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
   const { params, setParams } = useParams();
+  // const { favs, setFavs } = useFavs();
   const findHostel = (e) => {
     e.preventDefault();
     router.push("/search");
   };
 
-  const uploadHostel = (e) => {
-    e.preventDefault();
-    router.push("/uploads");
-  };
+  // const uploadHostel = (e) => {
+  //   e.preventDefault();
+  //   router.push("/uploads");
+  // };
 
   useEffect(() => {
     const getData = async () => {
@@ -61,9 +63,9 @@ const Home = () => {
     }));
   };
 
-  useEffect(() => {
-    console.log(params);
-  });
+  // useEffect(() => {
+  //   console.log(params);
+  // });
 
   return (
     <div>

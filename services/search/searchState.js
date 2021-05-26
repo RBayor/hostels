@@ -7,9 +7,8 @@ export const SearchProvider = ({ children }) => {
 
   useEffect(() => {
     setParams({
-      campus: "dungu",
+      campus: "nyankpala",
       maxPrice: 10000,
-      compare: [],
     });
   }, []);
 

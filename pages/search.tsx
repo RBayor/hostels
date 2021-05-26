@@ -4,6 +4,7 @@ import { fetchByCampus } from "../services/fetch/fetchByCampus";
 import { fetchAllHostels } from "../services/fetch/fetchAll";
 import Head from "next/head";
 import { useParams } from "../services/search/searchState";
+import { useFavs } from "../services/favourite/favourite";
 
 const Search: React.FC = (props) => {
   const router = useRouter();
@@ -12,6 +13,7 @@ const Search: React.FC = (props) => {
   const loadingArr = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
   const [searchQuery, setSearchQuery] = useState<string | null>();
   const [allHostels, setAllHostels] = useState(null);
+  const { favs, setFavs, addToFavs } = useFavs();
 
   const fetchHostelDetails = async (id: string) => {
     router.push({
@@ -134,10 +136,15 @@ const Search: React.FC = (props) => {
 
           {/* Compare */}
           {/* <div> */}
-          <button className="bg-purple-500 rounded p-2 w-16 focus:outline-none active:bg-purple-600  transition duration-150 transform hover:scale-105">
+          <button
+            className="bg-purple-500 rounded p-2 w-16 focus:outline-none active:bg-purple-600  transition duration-150 transform hover:scale-105"
+            onClick={() => router.push("/favourites")}
+          >
             <div className="flex flex-row ">
               <img src="/assets/unfav.svg" />
-              <span className="ml-1 text-xs rounded text-green-400">(0)</span>
+              <span className="ml-1 text-xs rounded text-green-400">
+                ({favs.length})
+              </span>
             </div>
           </button>
         </div>

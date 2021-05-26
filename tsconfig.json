@@ -22,7 +22,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "pages/_app.js", "src/state.js", "services/authentication/firebaseClient.js", "services/authentication/firebaseAdmin.js", "src/components/footer.js", "pages/index.tsx"  ],
+, "pages/_app.js", "src/state.js", "services/authentication/firebaseClient.js", "services/authentication/firebaseAdmin.js", "src/components/footer.js", "pages/index.tsx", "services/search/searchState.js"  ],
   "exclude": [
     "node_modules"
   ]

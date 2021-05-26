@@ -30,7 +30,7 @@ const Uploads: React.FC = () => {
   const router = useRouter();
   const auth = useAuth();
   const [loading, setLoading] = useState(false);
-  const [imgState, setImgState] = useState(false);
+  // const [imgState, setImgState] = useState(false);
   const [hostelDoc, setHostelDoc] = useState<null | string>(null);
   const [uploaded, setUploaded] = useState<number>(0);
   const [hostelInfo, setHostelInfo] = useState<Hostel>({
@@ -115,8 +115,6 @@ const Uploads: React.FC = () => {
       (error) => {},
       async () => {
         task.snapshot.ref.getDownloadURL().then((downloadURL: string) => {
-          //   console.log(downloadURL);
-
           setHostelInfo((prev: any) => ({
             ...prev,
             hostelImg: [...prev.hostelImg, downloadURL],
